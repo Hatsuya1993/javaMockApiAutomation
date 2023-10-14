@@ -1,17 +1,14 @@
 package org.example.api.test.posts;
 
-import groovy.json.JsonOutput;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.example.api.test.BaseTest;
 import org.example.api.test.Route;
-import org.example.pojo.Post;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
+import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -21,15 +18,9 @@ public class Posts extends BaseTest {
     @Test(description = "Should be able to get all post")
     private void testGetPosts() {
 
-        Response res = given().
-                baseUri(Route.postsRoute).
-                when().
-                get("/posts").
-                then().
-                assertThat().
-                statusCode(200).
-                extract().
-                response();
+        Response res =
+                PostsRequestHelper.getPostRequestHelper(Route.postsRoute,
+                        "/posts", 200);
 
         assertThat("Data is empty", res.asString().length() > 0);
         JsonPath jp = res.jsonPath();
@@ -44,10 +35,8 @@ public class Posts extends BaseTest {
 
     @Test(description = "Should be able to get a single post")
     private void testGetSinglePost() {
-        given().
-                baseUri(Route.postsRoute).
-                when().
-                get("posts/1").
+        PostsRequestHelper.getPostRequestHelper(Route.postsRoute,
+                "/posts/1", 200).
                 then().
                 assertThat().
                 statusCode(200).
@@ -64,15 +53,9 @@ public class Posts extends BaseTest {
 
     @Test(description = "Shoild be able to get the comments for a post")
     private void testGetSinglePostComment() {
-        Response res = given().
-                baseUri(Route.postsRoute).
-                when().
-                get("/posts/1/comments").
-                then().
-                assertThat().
-                statusCode(200).
-                extract().
-                response();
+        Response res =
+                PostsRequestHelper.getPostRequestHelper(Route.postsRoute,
+                        "/posts/1/comments", 200);
 
         assertThat("There are no comments in this post",
                 res.asString().length() > 0);
@@ -91,15 +74,10 @@ public class Posts extends BaseTest {
 
     @Test(description = "Should be able to get a comment of the post")
     private void testGetSinglePostCommentId() {
-        Response res = given().
-                baseUri(Route.postsRoute).
-                when().
-                get("/comments?postId=1").
-                then().
-                assertThat().
-                statusCode(200).
-                extract().
-                response();
+        Response res =
+                PostsRequestHelper.getPostRequestHelper(Route.postsRoute,
+                        "/comments?postId=1", 200);
+
 
         assertThat("This post has no comments", res.toString().length() > 0);
         JsonPath js = res.jsonPath();
@@ -124,12 +102,8 @@ public class Posts extends BaseTest {
         body.put("body", "bar");
         body.put("userId", 1);
 
-        given().
-                body(body).
-                baseUri(Route.postsRoute).
-                header("Content-type", "application/json; charset=UTF-8").
-                when().
-                post("/posts").
+        PostsRequestHelper.postPostRequestHelper(body, Route.postsRoute,
+                "/posts", 201).
                 then().
                 assertThat().
                 statusCode(201).
