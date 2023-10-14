@@ -4,6 +4,7 @@ import groovy.json.JsonOutput;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.example.api.test.BaseTest;
+import org.example.api.test.Route;
 import org.example.pojo.Post;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,11 +18,11 @@ import static org.hamcrest.Matchers.*;
 
 public class Posts extends BaseTest {
 
-    @Test
+    @Test(description = "Should be able to get all post")
     private void testGetPosts() {
 
         Response res = given().
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 when().
                 get("/posts").
                 then().
@@ -41,10 +42,10 @@ public class Posts extends BaseTest {
 
     }
 
-    @Test
+    @Test(description = "Should be able to get a single post")
     private void testGetSinglePost() {
         given().
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 when().
                 get("posts/1").
                 then().
@@ -61,10 +62,10 @@ public class Posts extends BaseTest {
                 );
     }
 
-    @Test
+    @Test(description = "Shoild be able to get the comments for a post")
     private void testGetSinglePostComment() {
         Response res = given().
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 when().
                 get("/posts/1/comments").
                 then().
@@ -88,10 +89,10 @@ public class Posts extends BaseTest {
         }
     }
 
-    @Test
+    @Test(description = "Should be able to get a comment of the post")
     private void testGetSinglePostCommentId() {
         Response res = given().
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 when().
                 get("/comments?postId=1").
                 then().
@@ -115,7 +116,7 @@ public class Posts extends BaseTest {
         }
     }
 
-    @Test
+    @Test(description = "Should be able to create a new post")
     private void testPostPosts() {
 
         HashMap<String, Object> body = new HashMap<String, Object>();
@@ -125,7 +126,7 @@ public class Posts extends BaseTest {
 
         given().
                 body(body).
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 header("Content-type", "application/json; charset=UTF-8").
                 when().
                 post("/posts").
@@ -142,7 +143,7 @@ public class Posts extends BaseTest {
                         "userId", is(equalTo(1)));
     }
 
-    @Test
+    @Test(description = "Should be able to update a single post")
     private void testPutPostOne() {
 
         HashMap<String, Object> body = new HashMap<>();
@@ -153,7 +154,7 @@ public class Posts extends BaseTest {
 
         given().
                 body(body).
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 header("Content-type", "application/json; charset=UTF-8").
                 when().
                 put("/posts/1").
@@ -169,7 +170,7 @@ public class Posts extends BaseTest {
                         is((equalTo(1))));
     }
 
-    @Test
+    @Test(description = "Should be able to update a single post")
     private void testPatchPostOne() {
 
         HashMap<String, Object> body = new HashMap<>();
@@ -177,7 +178,7 @@ public class Posts extends BaseTest {
 
         given().
                 body(body).
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 header("Content-type", "application/json; charset=UTF-8").
                 when().
                 patch("/posts/1").
@@ -195,11 +196,11 @@ public class Posts extends BaseTest {
 
     }
 
-    @Test
+    @Test(description = "Should be able to delete a single post request")
     private void testDeletePostOne() {
 
         given().
-                baseUri("https://jsonplaceholder.typicode.com").
+                baseUri(Route.postsRoute).
                 when().
                 delete("/posts/1").
                 then().
