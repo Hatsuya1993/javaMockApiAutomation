@@ -169,5 +169,44 @@ public class Posts extends BaseTest {
                         is((equalTo(1))));
     }
 
+    @Test
+    private void testPatchPostOne() {
+
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("id", 1);
+
+        given().
+                body(body).
+                baseUri("https://jsonplaceholder.typicode.com").
+                header("Content-type", "application/json; charset=UTF-8").
+                when().
+                patch("/posts/1").
+                then().
+                assertThat().
+                statusCode(200).
+                body("userId", is(instanceOf(Integer.class)), "userId",
+                        is(not(equalTo(""))), "id",
+                        is(instanceOf(Integer.class)), "id",
+                        is(not(equalTo(Integer.class))), "title",
+                        is(instanceOf(String.class)), "title",
+                        is(not(equalTo(""))), "body",
+                        is(instanceOf(String.class)), "body", is(not(equalTo(
+                                ""))));
+
+    }
+
+    @Test
+    private void testDeletePostOne() {
+
+        given().
+                baseUri("https://jsonplaceholder.typicode.com").
+                when().
+                delete("/posts/1").
+                then().
+                assertThat().
+                statusCode(200);
+
+    }
+
 
 }
