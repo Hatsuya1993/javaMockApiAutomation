@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -89,7 +91,7 @@ public class Posts extends BaseTest {
     @Test
     private void testGetSinglePostCommentId() {
         Response res = given().
-                baseUri("https://jsonplaceholder.typicode.com/").
+                baseUri("https://jsonplaceholder.typicode.com").
                 when().
                 get("/comments?postId=1").
                 then().
@@ -111,6 +113,33 @@ public class Posts extends BaseTest {
             assertThat("body is incorrect",
                     js.getString("body[" + i + "]") != "");
         }
+    }
+
+    @Test
+    private void testPostPosts() {
+
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("title", "foo");
+        body.put("body", "bar");
+        body.put("userId", 1);
+
+        given().
+                body(body).
+                baseUri("https://jsonplaceholder.typicode.com").
+                header("Content-type", "application/json; charset=UTF-8").
+                when().
+                post("/posts").
+                then().
+                assertThat().
+                statusCode(201).
+                body("id", is(greaterThan(0)),
+                        "id", is(instanceOf(Integer.class)),
+                        "title", is(instanceOf(String.class)),
+                        "title", is(equalTo("foo")),
+                        "body", is(instanceOf(String.class)),
+                        "body", is(equalTo("bar")),
+                        "userId", is(instanceOf(Integer.class)),
+                        "userId", is(equalTo(1)));
     }
 
 }
