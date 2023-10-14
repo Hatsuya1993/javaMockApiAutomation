@@ -142,4 +142,32 @@ public class Posts extends BaseTest {
                         "userId", is(equalTo(1)));
     }
 
+    @Test
+    private void testPutPostOne() {
+
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("id", 1);
+        body.put("title", "foo");
+        body.put("body", "bar");
+        body.put("userId", 1);
+
+        given().
+                body(body).
+                baseUri("https://jsonplaceholder.typicode.com").
+                header("Content-type", "application/json; charset=UTF-8").
+                when().
+                put("/posts/1").
+                then().
+                assertThat().
+                statusCode(200).
+                body("id", is(instanceOf(Integer.class)), "id",
+                        is(equalTo(1)), "title", is(instanceOf(String.class))
+                        , "title", is(equalTo("foo")), "body",
+                        is(instanceOf(String.class)), "body", is(equalTo("bar"
+                        )), "userId",
+                        is(instanceOf(Integer.class)), "userId",
+                        is((equalTo(1))));
+    }
+
+
 }
