@@ -49,4 +49,63 @@ public class PostsRequestHelper {
 
     }
 
+    static Response putPostRequestHelper(HashMap<String, Object> body,
+                                          String baseUri, String path,
+                                          Integer statusCode) {
+
+        Response res = PostsRequest.putPostRequest(body, baseUri, path);
+
+        Integer responseStatusCode = res.then().extract().statusCode();
+
+        if(!responseStatusCode.equals(statusCode)){
+            try {
+                throw new Exception("Status code expecting " + statusCode + " but is " + responseStatusCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return res;
+
+    }
+
+    static Response patchPostRequestHelper(HashMap<String, Object> body,
+                                         String baseUri, String path,
+                                         Integer statusCode) {
+
+        Response res = PostsRequest.patchPostRequest(body, baseUri, path);
+
+        Integer responseStatusCode = res.then().extract().statusCode();
+
+        if(!responseStatusCode.equals(statusCode)){
+            try {
+                throw new Exception("Status code expecting " + statusCode + " but is " + responseStatusCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return res;
+
+    }
+
+    static Response deletePostRequestHelper(String baseUri, String path,
+                                           Integer statusCode) {
+
+        Response res = PostsRequest.deletePostRequest(baseUri, path);
+
+        Integer responseStatusCode = res.then().extract().statusCode();
+
+        if(!responseStatusCode.equals(statusCode)){
+            try {
+                throw new Exception("Status code expecting " + statusCode + " but is " + responseStatusCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return res;
+
+    }
+
 }

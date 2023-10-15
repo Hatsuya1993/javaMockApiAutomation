@@ -26,4 +26,32 @@ public class PostsRequest {
                 post(path);
     }
 
+    static Response putPostRequest(HashMap<String, Object> body,
+                                    String baseUri, String path) {
+        return given().
+                body(body).
+                baseUri(baseUri).
+                header("Content-type", "application/json; charset=UTF-8").
+                when().
+                put(path);
+    }
+
+    static Response patchPostRequest(HashMap<String, Object> body,
+                                   String baseUri, String path) {
+        return given().
+                body(body).
+                baseUri(baseUri).
+                header("Content-type", "application/json; charset=UTF-8").
+                when().
+                patch(path);
+    }
+
+    static Response deletePostRequest(String baseUri, String path) {
+        return given().
+                baseUri(baseUri).
+                when().
+                delete(path);
+    }
+
+
 }

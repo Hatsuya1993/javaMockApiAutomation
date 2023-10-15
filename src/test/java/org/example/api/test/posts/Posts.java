@@ -126,12 +126,9 @@ public class Posts extends BaseTest {
         body.put("body", "bar");
         body.put("userId", 1);
 
-        given().
-                body(body).
-                baseUri(Route.postsRoute).
-                header("Content-type", "application/json; charset=UTF-8").
-                when().
-                put("/posts/1").
+
+        PostsRequestHelper.putPostRequestHelper(body, Route.postsRoute,
+                "/posts/1", 200).
                 then().
                 assertThat().
                 statusCode(200).
@@ -150,12 +147,8 @@ public class Posts extends BaseTest {
         HashMap<String, Object> body = new HashMap<>();
         body.put("id", 1);
 
-        given().
-                body(body).
-                baseUri(Route.postsRoute).
-                header("Content-type", "application/json; charset=UTF-8").
-                when().
-                patch("/posts/1").
+        PostsRequestHelper.patchPostRequestHelper(body, Route.postsRoute,
+                "/posts/1", 200).
                 then().
                 assertThat().
                 statusCode(200).
@@ -173,13 +166,8 @@ public class Posts extends BaseTest {
     @Test(description = "Should be able to delete a single post request")
     private void testDeletePostOne() {
 
-        given().
-                baseUri(Route.postsRoute).
-                when().
-                delete("/posts/1").
-                then().
-                assertThat().
-                statusCode(200);
+        PostsRequestHelper.deletePostRequestHelper(Route.postsRoute, "/posts" +
+                "/1", 200);
 
     }
 
