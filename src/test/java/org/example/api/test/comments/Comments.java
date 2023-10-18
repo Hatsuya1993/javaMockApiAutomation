@@ -74,10 +74,14 @@ public class Comments extends BaseTest {
                 then().
                 assertThat().
                 statusCode(201).
-                body("userId", is(instanceOf(Integer.class)));
-
-
-
+                body("userId", is(instanceOf(Integer.class)),
+                        "userId", is(not(equalTo(""))),
+                        "title", is(instanceOf(String.class)),
+                        "title", is(not(equalTo(""))),
+                        "body", is(instanceOf(String.class)),
+                        "body", is(not(equalTo(""))),
+                        "id", is(instanceOf(Integer.class)),
+                        "id", is(greaterThan(0)));
     }
 
 }
